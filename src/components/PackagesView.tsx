@@ -180,7 +180,18 @@ export default function PackagesView({ skuid, countryName, onBack, className = '
   const handleSetPrice = (packageItem: EsimPackage) => {
     setSelectedPackage(packageItem);
     const existingPrice = getSellingPrice(packageItem.priceid);
-    setNewPrice(existingPrice ? existingPrice.replace('₮', '').replace(/,/g, '') : '');
+    
+    if (existingPrice) {
+      // If price already exists, use existing price
+      setNewPrice(existingPrice.replace('₮', '').replace(/,/g, ''));
+    } else {
+      // If no price set yet, calculate suggested price: cost price in tugrik * 2.1
+      const exchangeRate = usdToMntRate || 3000;
+      const costPriceInTugrik = packageItem.price * exchangeRate;
+      const suggestedPrice = Math.round(costPriceInTugrik * 2.1);
+      setNewPrice(suggestedPrice.toString());
+    }
+    
     setShowPriceModal(true);
   };
 
@@ -414,7 +425,7 @@ export default function PackagesView({ skuid, countryName, onBack, className = '
               {pkg.supportDaypass === 1 && (
                 <div className="flex items-center text-xs text-blue-600">
                   <Clock className="h-3 w-3 mr-1" />
-                  <span>Daily Plan</span>
+                  <span>DayPass</span>
                 </div>
               )}
               
@@ -484,9 +495,21 @@ export default function PackagesView({ skuid, countryName, onBack, className = '
               </div>
             </div>
 
+            {/* Show suggested price calculation for new prices */}
+            {!sellingPrices.find(sp => sp.packageid === selectedPackage.priceid.toString()) && (
+              <div className="mb-4 p-3 bg-green-50 rounded-lg border border-green-200">
+                <div className="text-sm text-green-700">
+                  <strong>Санал болгох үнэ:</strong> Авах үнэ × 2.1 = {formatPrice(selectedPackage.price).tugrik} × 2.1 = {Math.round((selectedPackage.price * (usdToMntRate || 3000)) * 2.1).toLocaleString()}₮
+                </div>
+                <div className="text-xs text-green-600 mt-1">
+                  Энэ үнэ автоматаар тооцоолж оруулсан байна
+                </div>
+              </div>
+            )}
+
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Зарах үнэ (₮):
+                Зарах үнэ (монгол төгрөг):
               </label>
               <input
                 type="number"
@@ -496,6 +519,9 @@ export default function PackagesView({ skuid, countryName, onBack, className = '
                 placeholder="Үнэ оруулна уу"
                 min="0"
               />
+              <div className="text-xs text-gray-500 mt-1">
+                Монгол төгрөгөөр үнэ оруулна уу (₮)
+              </div>
             </div>
 
             <div className="flex gap-3">

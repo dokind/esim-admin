@@ -31,23 +31,26 @@ A modern admin dashboard for managing eSIM platform operations, built with Next.
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd esim-admin
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Run the development server:
+
 ```bash
 npm run dev
 ```
@@ -80,17 +83,20 @@ src/
 ## Key Components
 
 ### CountriesList
+
 - Displays countries organized by continents
 - Popular countries section for quick access
 - Country selection and navigation
 
 ### PackagesView
+
 - Package details display
 - Real-time currency conversion
 - Price setting modal with CRUD operations
 - Selling price management
 
 ### AdminLayout
+
 - Responsive sidebar navigation
 - Header with notifications
 - Consistent layout wrapper

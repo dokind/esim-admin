@@ -18,10 +18,7 @@ interface AdminLayoutProps {
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const navigation = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard, current: true },
-    { name: 'Countries', href: '/countries', icon: Globe, current: false },
-    { name: 'Users', href: '/users', icon: Users, current: false },
     { name: 'Analytics', href: '/analytics', icon: BarChart3, current: false },
-    { name: 'Settings', href: '/settings', icon: Settings, current: false },
   ];
 
   return (
